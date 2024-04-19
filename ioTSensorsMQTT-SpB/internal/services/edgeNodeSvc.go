@@ -53,7 +53,7 @@ var (
 // EdgeNodeSvc struct describes the EoN Node properties
 type EdgeNodeSvc struct {
 	Namespace      string
-	GroupId       string
+	GroupId        string
 	NodeId         string
 	Devices        map[string]*DeviceSvc
 	SessionHandler *MqttSessionSvc
@@ -68,7 +68,7 @@ func NewEdgeNodeInstance(
 	mqttConfigs *component.MQTTConfig,
 ) (*EdgeNodeSvc, error) {
 	log.Debugln("Setting up a new EoN Node instance 🔔")
-	
+
 	mqttSession := &MqttSessionSvc{
 		Log:         log,
 		MqttConfigs: *mqttConfigs,
@@ -76,7 +76,7 @@ func NewEdgeNodeInstance(
 
 	eonNode := &EdgeNodeSvc{
 		Namespace:      namespace,
-		GroupId:       groupId,
+		GroupId:        groupId,
 		NodeId:         nodeId,
 		SessionHandler: mqttSession,
 		Devices:        make(map[string]*DeviceSvc),
@@ -92,8 +92,8 @@ func NewEdgeNodeInstance(
 	bytes, err := NewSparkplugBEncoder(log).GetBytes(payload)
 	if err != nil {
 		log.WithFields(logrus.Fields{
-			"Groupe ID": eonNode.GroupId,
-			"Node ID":   eonNode.NodeId,
+			"Group ID": eonNode.GroupId,
+			"Node ID":  eonNode.NodeId,
 		}).Errorln("Error encoding the sparkplug payload ⛔")
 		return nil, err
 	}
@@ -103,7 +103,7 @@ func NewEdgeNodeInstance(
 			log.WithFields(logrus.Fields{
 				"Groupe Id": eonNode.GroupId,
 				"Node Id":   eonNode.NodeId,
-			}).Infoln("MQTT connection up ✅")				
+			}).Infoln("MQTT connection up ✅")
 
 			// Subscribe to EoN Node control commands
 			topic := namespace + "/" + groupId + "/NCMD/" + nodeId
@@ -390,7 +390,7 @@ func (e *EdgeNodeSvc) AddDevice(ctx context.Context, device *DeviceSvc, log *log
 			e.Devices[device.DeviceId] = device
 
 			log.WithField("Device Id", device.DeviceId).Infoln("Device added successfully ✅")
-			e.PublishBirth(ctx,log)
+			e.PublishBirth(ctx, log)
 			return e
 		}
 		log.Errorln("Device id not set ⛔")
@@ -454,7 +454,7 @@ func (e *EdgeNodeSvc) ShutdownDevice(ctx context.Context, deviceId string, log *
 	deviceToShutdown = nil
 
 	log.WithField("Device Id", deviceId).Infoln("Device removed successfully ✅")
-	e.PublishBirth(ctx,log)
+	e.PublishBirth(ctx, log)
 	return e
 }
 
