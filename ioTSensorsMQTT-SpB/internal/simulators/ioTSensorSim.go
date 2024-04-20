@@ -62,7 +62,7 @@ type UpdateSensorParams struct {
 type SensorData struct {
 	Value     float64
 	Timestamp time.Time
-	Seq uint64
+	Seq       uint64
 }
 
 func NewIoTSensorSim(
@@ -73,7 +73,7 @@ func NewIoTSensorSim(
 	DelayMax uint32,
 	Randomize bool,
 ) *IoTSensorSim {
-	rand.Seed(time.Now().UnixNano())
+	rand.New(rand.NewSource(time.Now().UnixNano()))
 	isAssigned := false
 	alias := 100 + uint64(rand.Int63n(10000))
 	return &IoTSensorSim{
@@ -104,7 +104,7 @@ func (s *IoTSensorSim) calculateNextValue() SensorData {
 	s.currentValue += valueChange * factor
 	timestamp := time.Now().Local()
 	return SensorData{
-		Value: s.currentValue,
+		Value:     s.currentValue,
 		Timestamp: timestamp,
 	}
 }
